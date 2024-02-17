@@ -1,17 +1,23 @@
 package com.example.digiteqentrytask
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.digiteqentrytask.databinding.MainActivityLayoutBinding
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityLayoutBinding
+
+    private val startActivityForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,32 +25,45 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //Check if the application has draw over other apps permission or not?
-        //This permission is by default available for API<23. But for API > 23
-        //you have to ask for the permission in runtime.
-        //Check if the application has draw over other apps permission or not?
-        //This permission is by default available for API<23. But for API > 23
-        //you have to ask for the permission in runtime.
+        checkOverlayPermission()
+        setOpenBubbleButton()
+
+    }
+
+    private fun checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-
-            //If the draw over permission is not available open the settings screen
-            //to grant the permission.
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-            startActivityForResult(intent, 2084)
-        } else {
-            initializeView()
+            createPermissionDialog().show()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun createPermissionDialog(): AlertDialog.Builder {
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("This app needs permission to draw over other app. Please allow this permission.")
+            .setTitle("Permission")
+            .setPositiveButton("Allow:") { dialog, _ ->
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName"),
+                )
+                startActivityForResult.launch(intent)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Decline") { dialog, _ ->
+                dialog.cancel()
+            }
+        return builder
+    }
 
-    private fun initializeView() {
+
+    private fun setOpenBubbleButton() {
         binding.launchBubbleButton.setOnClickListener {
-            startService(Intent(this@MainActivity, BubbleService::class.java))
-            finish()
+            checkOverlayPermission()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
+                startService(Intent(this@MainActivity, BubbleService::class.java))
+                finish()
+            }
         }
     }
-
 }
