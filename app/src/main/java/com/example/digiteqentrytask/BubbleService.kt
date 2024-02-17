@@ -59,15 +59,15 @@ class BubbleService : Service() {
                 MotionEvent.ACTION_DOWN -> {
 
                     //remember the initial position.
-                    initialX = params.x;
-                    initialY = params.y;
+                    initialX = params.x
+                    initialY = params.y
 
                     //remember the initial touch location
-                    initialTouchX = event.rawX;
-                    initialTouchY = event.rawY;
+                    initialTouchX = event.rawX
+                    initialTouchY = event.rawY
 
-                    lastAction = event.action;
-                    true;
+                    lastAction = event.action
+                    true
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -76,20 +76,20 @@ class BubbleService : Service() {
                         //Open MainActivity on bubble click
                         startActivity(Intent(this@BubbleService, MainActivity::class.java))
                         //close the service and remove the bubble
-                        stopSelf();
+                        stopSelf()
                     }
-                    lastAction = event.action;
-                    true;
+                    lastAction = event.action
+                    true
                 }
 
                 MotionEvent.ACTION_MOVE -> {
                     //Calculate the X and Y coordinates of the view.
-                    params.x = initialX + (event.rawX - initialTouchX).toInt();
-                    params.y = initialY + (event.rawY - initialTouchY).toInt();
+                    params.x = initialX + (event.rawX - initialTouchX).toInt()
+                    params.y = initialY + (event.rawY - initialTouchY).toInt()
 
                     //Update the layout with new X & Y coordinate
-                    windowManager.updateViewLayout(view, params);
-                    lastAction = event.action;
+                    windowManager.updateViewLayout(view, params)
+                    lastAction = event.action
                     true
                 }
 
