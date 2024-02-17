@@ -3,11 +3,9 @@ package com.example.digiteqentrytask
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.digiteqentrytask.databinding.MainActivityLayoutBinding
 
@@ -31,12 +29,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+        if (!Settings.canDrawOverlays(this)) {
             createPermissionDialog().show()
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun createPermissionDialog(): AlertDialog.Builder {
         val builder = AlertDialog.Builder(this)
         builder
@@ -60,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     private fun setOpenBubbleButton() {
         binding.launchBubbleButton.setOnClickListener {
             checkOverlayPermission()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
+            if (Settings.canDrawOverlays(this)) {
                 startService(Intent(this@MainActivity, BubbleService::class.java))
                 finish()
             }
