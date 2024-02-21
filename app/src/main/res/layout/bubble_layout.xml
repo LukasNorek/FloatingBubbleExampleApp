@@ -4,8 +4,8 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/bubble_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/bubble_size"
+        android:layout_height="@dimen/bubble_size"
         android:src="@mipmap/ic_digiteq_logo"
         android:contentDescription="@string/content_description_digiteq_logo" />
 </LinearLayout>
