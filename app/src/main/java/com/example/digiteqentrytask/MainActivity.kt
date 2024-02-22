@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity() {
     private fun createPermissionDialog(): AlertDialog.Builder {
         val builder = AlertDialog.Builder(this)
         builder
-            .setMessage("This app needs permission to draw over other app. Please allow this permission.")
-            .setTitle("Permission")
-            .setPositiveButton("Allow:") { dialog, _ ->
+            .setMessage(getString(R.string.permission_dialog_message))
+            .setTitle(getString(R.string.permission_dialog_title))
+            .setPositiveButton(getString(R.string.positive_action)) { dialog, _ ->
                 val intent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:$packageName"),
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult.launch(intent)
                 dialog.dismiss()
             }
-            .setNegativeButton("Decline") { dialog, _ ->
+            .setNegativeButton(getString(R.string.negative_action)) { dialog, _ ->
                 dialog.cancel()
             }
         return builder
