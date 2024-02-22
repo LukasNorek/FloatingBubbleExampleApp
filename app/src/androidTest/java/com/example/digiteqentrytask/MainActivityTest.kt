@@ -1,5 +1,8 @@
 package com.example.digiteqentrytask
 
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.provider.Settings
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -9,7 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -22,8 +27,7 @@ class MainActivityTest {
     @Test
     fun checkOverlayPermission_permissionNotGranted() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        // There is no way to programmatically set the permission for tests. This assert will never
-        // fail. And there is no way to test positive path for the permission.
+        // This assert will never fail as the app is installed fresh each time and the permission is not set
         Settings.canDrawOverlays(ApplicationProvider.getApplicationContext())
             .let { canDrawOverlays ->
                 if (canDrawOverlays) {
@@ -53,11 +57,49 @@ class MainActivityTest {
         Espresso.onView(ViewMatchers.withText(context.resources.getString(R.string.positive_action)))
             .perform(ViewActions.click())
 
-        // Setting should be shown and when back button is pressed we should be back in the app.
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
 
-        Espresso.onView(ViewMatchers.withId(R.id.launch_bubble_button))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        // Settings should be shown and when back button is pressed we should be back in the app.
+        // works on english language devices
+        allowPermission()
 
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle()
+
+        val bubbleButton = Espresso.onView(ViewMatchers.withId(R.id.launch_bubble_button))
+        // Check that MainActivity with bubble button is displayed and click on the button
+        bubbleButton.check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        bubbleButton.perform(ViewActions.click())
+
+        // Check if BubbleService is running
+        assertTrue(context.isServiceRunning(BubbleService::class.java))
     }
+
+
+    private fun allowPermission() {
+        val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val allowButtonText = "Allow display over other apps"
+        uiDevice.waitForIdle()
+        val allowButton = uiDevice.findObject(UiSelector().text(allowButtonText))
+        if (allowButton.exists()) {
+            allowButton.click()
+        } else {
+            val digiteqAppButton =
+                uiDevice.findObject(UiSelector().textContains("DigiteqEntryTask"))
+            if (digiteqAppButton.exists()) {
+                digiteqAppButton.click()
+                uiDevice.findObject(UiSelector().text(allowButtonText)).click()
+                uiDevice.pressBack()
+            } else {
+                Assert.fail("Overlay permission not granted")
+            }
+        }
+        uiDevice.pressBack()
+    }
+
+
+    @Suppress("DEPRECATION") // Deprecated for third party Services.
+    private fun <T> Context.isServiceRunning(service: Class<T>) =
+        (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Integer.MAX_VALUE)
+            .any { it.service.className == service.name }
+
 }
