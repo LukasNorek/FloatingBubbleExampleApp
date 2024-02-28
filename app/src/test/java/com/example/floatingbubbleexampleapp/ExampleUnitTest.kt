@@ -1,4 +1,4 @@
-package com.example.digiteqentrytask
+package com.example.floatingbubbleexampleapp
 
 import org.junit.Test
 

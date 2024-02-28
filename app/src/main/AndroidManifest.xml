@@ -19,7 +19,7 @@
             android:name=".BubbleService"
             android:enabled="true" />
         <activity
-            android:name="com.example.digiteqentrytask.MainActivity"
+            android:name="com.example.floatingbubbleexampleapp.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

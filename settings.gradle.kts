@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DigiteqEntryTask"
+rootProject.name = "FloatingBubbleExampleApp"
 include(":app")
  

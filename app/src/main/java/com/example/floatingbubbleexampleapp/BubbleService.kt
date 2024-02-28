@@ -1,4 +1,4 @@
-package com.example.digiteqentrytask
+package com.example.floatingbubbleexampleapp
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -17,7 +17,7 @@ import android.view.WindowManager
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
-import com.example.digiteqentrytask.databinding.BubbleLayoutBinding
+import com.example.floatingbubbleexampleapp.databinding.BubbleLayoutBinding
 import kotlin.math.roundToInt
 
 

@@ -1,4 +1,4 @@
-package com.example.digiteqentrytask
+package com.example.floatingbubbleexampleapp
 
 import android.app.ActivityManager
 import android.content.Context

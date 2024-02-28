@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DigiteqEntryTask</string>
+    <string name="app_name">FloatingBubbleExampleApp</string>
     <string name="content_description_digiteq_logo">Digiteq logo</string>
     <string name="content_description_launch_bubble_button">Launch bubble button</string>
     <string name="launch_bubble_button_text">Open bubble</string>

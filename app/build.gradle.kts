@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.digiteqentrytask"
+    namespace = "com.example.floatingbubbleexampleapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.digiteqentrytask"
+        applicationId = "com.example.floatingbubbleexampleapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -24,6 +24,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
         }
     }
     compileOptions {
